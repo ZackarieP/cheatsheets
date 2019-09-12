@@ -34,7 +34,7 @@ The C analogue to classes in object-oriented languages like Java is structs. Str
 // This defines a struct called person
 struct person {
     int age;
-    char* name; // And a pointer to another node
+    char* name;
 }
 
 // We can "instantiate" person "objects"
