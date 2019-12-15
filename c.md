@@ -76,6 +76,21 @@ char* readonly_string = "Hello";
 char editable_string[] = "World";
 ```
 
+Since `printf()` takes strings, we can print other primitives with string formatting. Commonly used format specifiers are:
+```cpp
+int d = 10.5;
+printf("%d\n", d);
+
+int i = 10;
+printf("%i\n", i);
+
+int s = "Hello";
+printf("%s\n", s);
+
+char c = "c";
+printf("%c\n", c);
+```
+
 Usage of some built-in C functions for working with strings is illustrated below.
 ```cpp
 int string_length = strlen(readonly_string); // Value = 5
