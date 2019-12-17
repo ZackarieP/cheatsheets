@@ -131,5 +131,10 @@ In SML-NJ, `list` is not a type itself, but rather a type constructor for types 
 Declaring a list:
 ```sml
 [1,2,3]             (*using square brackets*)
-1::2::3::[]         (*using the :: operator*)
+1::2::3::[]         (*using the :: operator, which operates like a cons in Scheme*)
 ```
+
+#### Polymorphism
+Functions are assigned 'generic' types `'a` if their arguments could potentially be of different types. When inferring types, SML infers the most general type possible for a function.
+
+There are also "eqtypes", which signify any type that can be compared for equality. For example, `int`s and `string`s can be compared for equality, while functions cannot.
