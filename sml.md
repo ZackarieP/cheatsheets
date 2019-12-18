@@ -131,10 +131,68 @@ In SML-NJ, `list` is not a type itself, but rather a type constructor for types 
 Declaring a list:
 ```sml
 [1,2,3]             (*using square brackets*)
-1::2::3::[]         (*using the :: operator, which operates like a cons in Scheme*)
+1::2::3::[]         (*using the :: operator*)
+```
+
+The `::` operator operates like `cons x L` in Scheme—it draws a box with a value `x` and a pointer to the list `L`. We can write cons as follows:
+
+```sml
+fun cons (x, L) = x::L
 ```
 
 #### Polymorphism
 Functions are assigned 'generic' types `'a` if their arguments could potentially be of different types. When inferring types, SML infers the most general type possible for a function.
 
-There are also "eqtypes", which signify any type that can be compared for equality. For example, `int`s and `string`s can be compared for equality, while functions cannot.
+There are also "eqtypes", which refers to any type that can be compared for equality. For example, `int`s and `string`s can be compared for equality, while functions cannot.
+
+### Defining your own datatypes
+
+The general syntax for defining a datatype in SML is as follows:
+```sml
+datatype <datatype name> =
+    <constructor name 1> of <type>
+  | <constructor name 2> of <type>
+  | <constructor name 3> of <type>
+  ...
+```
+
+For example, lists in SML are defined as 
+```sml
+datatype 'a list =
+    :: of 'a * 'a list 
+  | nil
+```
+
+## Higher-order functions
+
+SML provides `map`, `filter`, `foldr` and `foldl`.
+
+### map
+`map` takes two arguments, a function and a list, and applies the function to every member of the list. It returns a new list of the same length as the original list, but with the user-specified function applied to each element.
+
+Syntax:
+```sml
+map f somelist
+```
+
+### filter
+`filter` takes two arguments, a function and a list, and applies the function to every member of the list. Unlike `map`, the function must be a predicate: it must take a single argument and return a boolean value for that argument. It returns a new list that contains only the elements of the original list for which the predicate evaluated to `true`.
+
+Syntax:
+```sml
+filter pred somelist
+```
+
+### foldr and foldl
+`foldr` and `foldl` are highly flexible higher-order functions (that can be used to implement other higher-order functions such as `map` and `filter`). They both take three arguments:
+1. A function specifying how a user-provided list is to be combined
+2. A user-provided list
+3. An accumulator value whose initial value must be specified when `foldr` or `foldl` is called
+
+`foldr` and `foldl` can be thought of as "accumulators": given a list of values, they "accumulate" those values into a single return value. This return value could be anything, and is determined by the user-provided function.
+
+Syntax:
+```sml
+foldl f accum somelist
+foldr f accum somelist
+```
