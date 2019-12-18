@@ -56,6 +56,13 @@ fun add (x,y) = x + y
 add (2,3)           (*evaluates to 5*)
 ```
 
+### Anonymous functions
+We can define anonymous functions with the same fat-arrow syntax available in JavaScript, and using the keyword `fn`. The following anonymous function takes a single integer argument and returns its square:
+```sml
+(fn x => x*x)
+```
+This is especially useful for higher-order functions, which are introduced in a later section.
+
 ### Let
 
 Names bound with `let` are locally scoped and limited to the `let` expression in which they appear. Moreover, values bound with `let` cannot be rebound / "updated" after they have been bound to a name.
@@ -196,3 +203,46 @@ Syntax:
 foldl f accum somelist
 foldr f accum somelist
 ```
+
+## Structures
+Structures are analogous to classes in other object-oriented programming languages. Syntax for declaring a structure datatype and member methods:
+```sml
+structure myStructure =
+    struct
+        datatype <name> =
+            <constructor 1> of <type>
+          | <constructor 2> of <type>
+
+    fun foo (bar) = 
+            <expr>
+          | <expr>
+
+    fun baz (qux) = 
+            <expr>
+          | <expr>
+
+end
+
+(* Syntax for accessing properties inside a structure: *)
+myStructure.baz
+
+(* Syntax for loading a module, similar to using a namespace *)
+open myStructure
+baz             (* You can then directly reference members *)
+```
+
+## Signatures
+
+Signatures are analogous to interfaces in TypeScript or Java. They specify an interface to a structure, including constructors and member functions, that the programmer can then implement however they wish. Once a signature has been ascribed to an interface, all other names that are not declared in the interface are hidden.
+
+There are two kinds of signature ascription in SML:
+1. Transparent: the types of the names in the structure are visible
+2. Opaque: the types of the names in the structure are not visible
+
+The syntax for declaring each is as follows:
+```sml
+structure FooBar : Foo          (* Transparent *)
+structure FooBar :> Foo         (* Opaque *)
+```
+
+Opaque signature ascription is generally preferred unless the types of the names do matter, e.g. when implementing functors.
