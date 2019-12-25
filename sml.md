@@ -64,7 +64,6 @@ We can define anonymous functions with the same fat-arrow syntax available in Ja
 This is especially useful for higher-order functions, which are introduced in a later section.
 
 ### Let
-
 Names bound with `let` are locally scoped and limited to the `let` expression in which they appear. Moreover, values bound with `let` cannot be rebound / "updated" after they have been bound to a name.
 
 A common `let` usage pattern combines some names bound with `let` with the `in` and `end` keywords. Together, this can be interpreted as a series of local bindings, to be used `in` some expression. Those local bindings go out of scope and are no longer valid after the `end` of this scope.
@@ -131,6 +130,15 @@ fun fib {x=0} = 1
 fib {x=0}           (*evaluates to 1*)
 fib {x=4}           (*evaluates to 5*)
 ```
+
+### Types
+You can give types names in SML:
+```sml
+type someParam = {x:int,
+                  y:real,
+                  z:string}
+```
+This can be used to type records in the context of function arguments, thus telling the SML compiler what the types of record entries are.
 
 ### Lists
 In SML-NJ, `list` is not a type itself, but rather a type constructor for types like `int list` (a list containing only `int`s) and `string list` (a list containing only `string`s).
@@ -205,13 +213,16 @@ foldr f accum somelist
 ```
 
 ## Structures
-Structures are analogous to classes in other object-oriented programming languages. Syntax for declaring a structure datatype and member methods:
+Structures are a means of packaging types and values into a namespace. They are *not* like classes in object-oriented programming languages. 
+
+Syntax for declaring a structure:
 ```sml
 structure myStructure =
     struct
         datatype <name> =
             <constructor 1> of <type>
           | <constructor 2> of <type>
+            ...
 
     fun foo (bar) = 
             <expr>
@@ -226,7 +237,7 @@ end
 (* Syntax for accessing properties inside a structure: *)
 myStructure.baz
 
-(* Syntax for loading a module, similar to using a namespace *)
+(* Syntax for loading a module *)
 open myStructure
 baz             (* You can then directly reference members *)
 ```
@@ -245,4 +256,16 @@ structure FooBar : Foo          (* Transparent *)
 structure FooBar :> Foo         (* Opaque *)
 ```
 
-Opaque signature ascription is generally preferred unless the types of the names do matter, e.g. when implementing functors.
+Opaque signature ascription is generally preferred unless the types of the names in the structure do matter.
+
+## Functors
+Functors take structures as arguments and also return structures. This enables us to instantiate some structure `Foo` whose functionality depends on structures `Bar`, `Baz`, etc. that all conform to some specified signature `Qux`. The resultant functor returns instances of `Foo` and only references signature `Qux` without directly referencing `Bar` or `Baz`. This decouples the creation of `Foo` from whichever underlying structure was used in its construction, leading to more modular and maintainable code.
+
+Syntax:
+```sml
+functor myFunctor (x: SOME_TYPE) :> SomeSig
+    ...
+```
+
+## References
+[Functors](http://www.cs.cornell.edu/courses/cs312/2006fa/recitations/rec08.html)
