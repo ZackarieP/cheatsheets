@@ -634,3 +634,142 @@ $t = $s ^ imm; advance_pc (4);
 ```mips
 xori $t, $s, imm
 ```
+
+## MIPS Pseudoinstructions
+
+### ABS
+#### Description
+The absolute value pseudo instruction loads the absolute value contained in one register into another register.
+#### Equivalent Instruction
+```mips
+addu $1, $2, $0
+bgez $2, 8 (offset=8 → skip 'sub' instruction)
+sub $1, $2, $0
+```
+#### Syntax
+```mips
+abs $1, $2
+```
+### BLT
+#### Description
+The blt instruction compares 2 registers, treating them as signed integers, and takes a branch if one register is less than another.
+#### Equivalent Instruction
+```mips
+slt $1, $8, $9
+bne $1, $0, label
+```
+#### Syntax
+```mips
+blt $8, $9, label
+```
+### BGT
+#### Description
+If r1 > r2, branch to label.
+
+#### Equivalent Instruction
+```mips
+slt $at, $t1, $t0 bne $at, $zero, label
+```
+#### Syntax
+```mips
+bgt $1, $2, label
+```
+### BLE
+#### Description
+If r1 <= r2, branch to label.
+
+#### Equivalent Instruction
+```mips
+ble $1, $2, label
+```
+#### Syntax
+```mips
+slt $at, $t1, $t0 beq $at, $zero, label
+```
+### NEG
+#### Description
+Flips sign of $1 and stores result in $2.
+
+#### Equivalent Instruction
+```mips
+sub $2, $0, $1
+```
+#### Syntax
+```mips
+neg $2, $1
+```
+### NOT
+#### Description
+Negates $1 and places result in $2.
+
+#### Equivalent Instruction
+```mips
+nor $2, $1, $0
+```
+#### Syntax
+```mips
+not $2, $1
+```
+### BGE
+#### Description
+If $1 >= $2, branch to label.
+#### Equivalent Instruction
+```mips
+slt $at, $s, $t
+beq $at, $zero, C
+```
+#### Syntax
+```mips
+bge $1, $2, C
+```
+### LI
+#### Description
+Load a 32 bit constant into destination register.
+#### Equivalent Instruction
+```mips
+lui $t, C_hi
+ori $t, $t, C_lo
+```
+#### Syntax
+```mips
+li $t, C
+```
+### LA
+#### Description
+Load a label address into destination register.
+#### Equivalent Instruction
+```mips
+ lui $at, 4097 (0x1001 → upper 16 bits of $at).
+  ori $a0,$at,disp 
+```
+#### Syntax
+```mips
+la $a0,address
+```
+### MOVE
+#### Description
+The move pseudo instruction moves the contents of one register into another register.
+#### Equivalent Instruction
+```mips
+add $1, $2, $0
+```
+#### Syntax
+```mips
+move $1, $2
+```
+### SGE
+#### Description
+Set $3 to 1 if $1 >= $2, 0 otherwise.
+
+#### Syntax
+```mips
+sgt $3, $1, $2
+```
+### SGT
+#### Description
+Set $3 to 1 if $1 > $2, 0 otherwise.
+
+#### Syntax
+```mips
+sge $3, $1, $2
+```
